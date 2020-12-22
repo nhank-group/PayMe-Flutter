@@ -40,7 +40,7 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'vn.payme.sdk:payme-sdk:0.1.4'
+    implementation 'vn.payme.sdk:payme-sdk:0.1.6'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.chaos.view:pinview:1.4.4'

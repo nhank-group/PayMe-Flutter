@@ -15,11 +15,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
+  final payMe = PaymeFlutter();
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+
+    final result = payMe.init(appId: "abc", publicKey: "abc", privateKey: "abc", connectToken: "abc", colors: [Colors.black]).then((value) {
+       print(value);
+    });
+
+   
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
