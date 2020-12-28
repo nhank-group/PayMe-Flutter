@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await PaymeFlutter.platformVersion, '42');
+   
   });
 }
