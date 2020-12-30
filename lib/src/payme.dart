@@ -20,7 +20,7 @@ class PaymeFlutter {
 
   PaymeFlutter();
 
-  Future init(
+  Future<bool> init(
       {@required appId,
       @required publicKey,
       @required appPrivateKey,
