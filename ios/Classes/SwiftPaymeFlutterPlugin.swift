@@ -55,22 +55,40 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
             }
             break
         case "open_wallet":
-            
             if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe {
-                flutterVC = currentVC
                 let payMeVC = PayMeViewController()
                 payMeVC.modalPresentationStyle = .fullScreen
+                payMeVC.viewControllerDimissHandler = {
+                    UIApplication.shared.keyWindow?.rootViewController = currentVC
+                    UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                }
                 let navigationController = UINavigationController(rootViewController: payMeVC)
                 navigationController.modalPresentationStyle = .fullScreen
                 UIApplication.shared.keyWindow?.rootViewController = navigationController
                 UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                
                 payMe.openWallet(currentVC: payMeVC, action: PayME.Action.OPEN, amount: nil, description: nil, extraData: nil, onSuccess: { (dict) in
                     print(dict)
                 }, onError: { (error) in
                     print(error)
                 })
             }
-            
+            break
+        case "open_wallet":
+            if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe {
+                let payMeVC = PayMeViewController()
+                payMeVC.modalPresentationStyle = .fullScreen
+                payMeVC.viewControllerDimissHandler = {
+                    UIApplication.shared.keyWindow?.rootViewController = currentVC
+                    UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                }
+                let navigationController = UINavigationController(rootViewController: payMeVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                UIApplication.shared.keyWindow?.rootViewController = navigationController
+                UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                
+                payMe.
+            }
             break
         default:
             result(FlutterMethodNotImplemented)
@@ -81,7 +99,35 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
 
 class PayMeViewController: UIViewController {
     
+    private var isVCLoaded = false
+    var viewControllerDimissHandler: (() -> Void)?
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
-        self.view.backgroundColor = UIColor.red
+        super.viewDidLoad()
+        
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        isVCLoaded = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if isVCLoaded {
+            self.dismiss(animated: false) {
+                if let viewControllerDimissHandler = self.viewControllerDimissHandler {
+                    viewControllerDimissHandler()
+                }
+            }
+        }
     }
 }
