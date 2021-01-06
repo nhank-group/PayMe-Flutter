@@ -80,8 +80,8 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
     return token;
   }
 
-  Future<bool> _initPayMe(String appId, String publicKey,
-      String appPrivateKey, String connectToken) async {
+  Future<bool> _initPayMe(String appId, String publicKey, String appPrivateKey,
+      String connectToken) async {
     return await payMe.init(
         appId: _appId,
         publicKey: _publickey,
@@ -153,11 +153,11 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
                   onPressed: () async {
                     if (_userIdTextController.text != null &&
                         _phoneTextController.text != null) {
-                      final token = await _generateToken(
-                          _userIdTextController.text,
-                          _phoneTextController.text);
+                      // final token = await _generateToken(
+                      //     _userIdTextController.text,
+                      //     _phoneTextController.text);
                       await _initPayMe(
-                          _appId, _publickey, _appPrivateKey, token);
+                          _appId, _publickey, _appPrivateKey, "abc");
                     } else {
                       showDialog(
                           context: context,
@@ -202,7 +202,32 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
                           ));
                 }
               },
-              child: Text("Mở ví"))
+              child: Text("Mở ví")),
+          FlatButton(
+              color: Colors.blue,
+              onPressed: () async {
+                if (payMe != null) {
+                  final error =
+                      await payMe.getWalletInfo((balance, cash, lockCash) {
+                    showDialog(
+                        context: context,
+                        builder: (_) => new AlertDialog(
+                              title: new Text("Lỗi"),
+                              content: new Text(
+                                  'balance: $balance\ncash: $cash\nlockCash: $lockCash'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('OK'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                )
+                              ],
+                            ));
+                  });
+                } else {}
+              },
+              child: Text("Thông tin tài khoảng"))
         ],
       ),
     );

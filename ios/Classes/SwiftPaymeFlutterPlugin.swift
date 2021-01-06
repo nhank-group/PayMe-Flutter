@@ -54,6 +54,16 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 result(false)
             }
             break
+        case "get_wallet_info":
+            if let payMe = payMe {
+                payMe.getWalletInfo { (dict) in
+                    result(dict)
+                } onError: { (error) in
+                    print(error)
+                }
+                
+            }
+            break
         case "open_wallet":
             if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe {
                 let payMeVC = PayMeViewController()
@@ -74,8 +84,8 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 })
             }
             break
-        case "open_wallet":
-            if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe {
+        case "deposit":
+            if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe, let amount = arguments?["amount"] as? Int {
                 let payMeVC = PayMeViewController()
                 payMeVC.modalPresentationStyle = .fullScreen
                 payMeVC.viewControllerDimissHandler = {
@@ -87,7 +97,31 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 UIApplication.shared.keyWindow?.rootViewController = navigationController
                 UIApplication.shared.keyWindow?.makeKeyAndVisible()
                 
-                payMe.
+                payMe.deposit(currentVC: payMeVC, amount: amount, description: nil, extraData: nil, onSuccess: { (dict) in
+                    print(dict)
+                }, onError: { (error) in
+                    print(error)
+                })
+            }
+            break
+        case "withdraw":
+            if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe, let amount = arguments?["amount"] as? Int {
+                let payMeVC = PayMeViewController()
+                payMeVC.modalPresentationStyle = .fullScreen
+                payMeVC.viewControllerDimissHandler = {
+                    UIApplication.shared.keyWindow?.rootViewController = currentVC
+                    UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                }
+                let navigationController = UINavigationController(rootViewController: payMeVC)
+                navigationController.modalPresentationStyle = .fullScreen
+                UIApplication.shared.keyWindow?.rootViewController = navigationController
+                UIApplication.shared.keyWindow?.makeKeyAndVisible()
+                
+                payMe.withdraw(currentVC: currentVC, amount: amount, description: nil, extraData: nil) { (dict) in
+                    print(dict)
+                } onError: { (error) in
+                    print(error)
+                }
             }
             break
         default:
@@ -121,7 +155,7 @@ class PayMeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         if isVCLoaded {
             self.dismiss(animated: false) {
                 if let viewControllerDimissHandler = self.viewControllerDimissHandler {
