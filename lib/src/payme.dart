@@ -18,7 +18,9 @@ class PaymeFlutter {
   static const MethodChannel _channel = const MethodChannel('payme_flutter');
   bool _isInited = false;
 
-  PaymeFlutter();
+  PaymeFlutter() {
+    Debug.enabled = true;
+  }
 
   Future<bool> init(
       {@required appId,

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:payme_flutter/payme_flutter.dart';
 
@@ -14,6 +15,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,7 +38,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _publickey =
-      """--- BEGIN SSH2 PUBLIC KEY ----Comment: "rsa-key-20201008"AAAAB3NzaC1yc2EAAAABJQAAAEEAi8guoakL0/cLH3tJPWdmPUTIhsCVjctg/rLi7A8vVFJGdKAxpBLxUVPXxYt3Fu86PlsT4Arll8qLcg0wEUS4PQ==---- END SSH2 PUBLIC KEY ----""";
+      """---- BEGIN SSH2 PUBLIC KEY ----Comment: "rsa-key-20201008"AAAAB3NzaC1yc2EAAAABJQAAAEEAi8guoakL0/cLH3tJPWdmPUTIhsCVjctg/rLi7A8vVFJGdKAxpBLxUVPXxYt3Fu86PlsT4Arll8qLcg0wEUS4PQ==---- END SSH2 PUBLIC KEY ----""";
 
   final _appPrivateKey = """-----BEGIN RSA PRIVATE KEY-----
 MIICWgIBAAKBgF22s6t6BLihEkRroHduR9J0PO1slI4XNrpWhnNM9AestacLah2S
@@ -69,6 +75,13 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
               title: new Text("Token"),
               content: new Text(token),
               actions: <Widget>[
+                FlatButton(
+                  child: Text('Copy'),
+                  onPressed: () async{
+                    await Clipboard.setData(new ClipboardData(text: token));
+                    Navigator.of(context).pop();
+                  },
+                ),
                 FlatButton(
                   child: Text('Close'),
                   onPressed: () {
@@ -153,11 +166,12 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
                   onPressed: () async {
                     if (_userIdTextController.text != null &&
                         _phoneTextController.text != null) {
-                      // final token = await _generateToken(
-                      //     _userIdTextController.text,
-                      //     _phoneTextController.text);
+                      final token = await _generateToken(
+                          _userIdTextController.text,
+                          _phoneTextController.text);
+                          print('connect token $token');
                       await _initPayMe(
-                          _appId, _publickey, _appPrivateKey, "abc");
+                          _appId, _publickey, _appPrivateKey, token);
                     } else {
                       showDialog(
                           context: context,

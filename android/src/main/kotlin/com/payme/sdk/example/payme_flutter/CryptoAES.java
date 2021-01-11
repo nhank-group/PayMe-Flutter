@@ -2,6 +2,9 @@ package com.payme.sdk.example.payme_flutter;
 
 import android.util.Base64;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -13,10 +16,10 @@ public class CryptoAES {
     public static byte[] ivbyte = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public static String encrypt(String input, String key) {
         try {
-            byte[] bytes = input.getBytes();
+            byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
             Cipher ciper = Cipher.getInstance("AES/CBC/PKCS5Padding");
             IvParameterSpec iv = new IvParameterSpec(ivbyte,0, ciper.getBlockSize());
-            SecretKey secret = new SecretKeySpec(key.getBytes(), "AES");
+            SecretKey secret = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
 
             ciper.init(Cipher.ENCRYPT_MODE, secret,iv);
             byte[] result =  ciper.doFinal(bytes);
