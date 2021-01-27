@@ -8,7 +8,7 @@ import 'extension.dart';
 import 'model.dart';
 
 class PaymeFlutter {
-  String _appId;
+  String _appToken;
   String _publicKey;
   String _appPrivateKey;
   String _connectToken;
@@ -23,19 +23,19 @@ class PaymeFlutter {
   }
 
   Future<bool> init(
-      {@required appId,
+      {@required appToken,
       @required publicKey,
       @required appPrivateKey,
       @required connectToken,
       @required env,
       colors}) async {
-    assert(appId != null && appId.isNotEmpty);
+    assert(appToken != null && appToken.isNotEmpty);
     assert(publicKey != null && publicKey.isNotEmpty);
     assert(appPrivateKey != null && appPrivateKey.isNotEmpty);
     assert(env != null);
     assert(connectToken != null && connectToken.isNotEmpty);
 
-    _appId = appId;
+    _appToken = appToken;
     _publicKey = publicKey;
     _appPrivateKey = appPrivateKey;
     _connectToken = connectToken;
@@ -43,13 +43,13 @@ class PaymeFlutter {
     _colors = colors;
 
     final Map<String, dynamic> data = {
-      "app_id": _appId,
-      "public_key": _appId,
+      "app_token": _appToken,
+      "public_key": _publicKey,
       "app_private_key": _appPrivateKey,
       "connect_token": _connectToken,
       "env": _env == Environment.PRODUCTION
           ? "production"
-          : (_env == Environment.SANDBOX ? "sandbox" : "test"),
+          : (_env == Environment.SANDBOX ? "sandbox" : "dev"),
       "colors": _colors != null
           ? _colors.map((color) => color.toHexTriplet()).toList()
           : null
@@ -66,12 +66,24 @@ class PaymeFlutter {
 
   static Future<String> generateToken(String userId, String phone) async {
     return await _channel.invokeMethod('generate_token',
-        {"user_id": userId, "phone": phone, "key": "3zA9HDejj1GnyVK0"});
+        {"user_id": userId, "phone": phone, "key": "zfQpwE6iHbOeAfgX"});
   }
 
   Future<bool> get isConnected async {
     final bool isConnected = await _channel.invokeMethod('is_connected');
     return isConnected;
+  }
+
+  Future<bool> login() async {
+    if (_isInited) {
+      try {
+        return await _channel.invokeMethod('login');
+      } catch (e) {
+        Debug.log(e);
+      }
+    } else {
+      Debug.log("PayMe is not intited");
+    }
   }
 
   Future<void> openWallet() async {

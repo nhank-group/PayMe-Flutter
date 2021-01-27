@@ -3,6 +3,7 @@ package com.payme.sdk.example.payme_flutter
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.View
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -15,9 +16,9 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import org.json.JSONObject
 import vn.payme.sdk.PayME
-import vn.payme.sdk.model.Action
-import vn.payme.sdk.model.Env
-import java.sql.Timestamp
+import vn.payme.sdk.enums.Action
+import vn.payme.sdk.enums.Env
+
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -55,8 +56,8 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
                 whenAllNotNull(appId, colors, publicKey) {
                     var _env = Env.PRODUCTION
-                    if (env == "TEST") {
-                        _env = Env.TEST
+                    if (env == "DEV") {
+                        _env = Env.DEV
                     } else if (env == "SANDBOX") {
                         _env = Env.SANDBOX
                     }
@@ -87,15 +88,19 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(connectToken)
             }
 
+            "login" -> {
+                payme?.login(onSuccess = { jsonObject ->
+                    result.success(true)
+                },
+                        onError = { jsonObject, code, message ->
+                            result.error(code?.toString(), message, jsonObject)
+                        })
+
+            }
+
             "open_wallet" -> {
                 payme?.let {
-                    payme!!.openWallet(Action.OPEN, null, null, null,
-                            onSuccess = { json: JSONObject ->
-                                Log.e("OPEN_WALLLET_SUCCESS", json.toString())
-                            },
-                            onError = { message: String ->
-                                Log.e("OPEN_WALLLET_ERROR", message)
-                            })
+                    payme!!.openWallet()
                 }
             }
 

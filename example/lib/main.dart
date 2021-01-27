@@ -38,29 +38,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _publickey =
-      """---- BEGIN SSH2 PUBLIC KEY ----Comment: "rsa-key-20201008"AAAAB3NzaC1yc2EAAAABJQAAAEEAi8guoakL0/cLH3tJPWdmPUTIhsCVjctg/rLi7A8vVFJGdKAxpBLxUVPXxYt3Fu86PlsT4Arll8qLcg0wEUS4PQ==---- END SSH2 PUBLIC KEY ----""";
+      """
+    -----BEGIN PUBLIC KEY-----
+    MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKWcehEELB4GdQ4cTLLQroLqnD3AhdKi
+    wIhTJpAi1XnbfOSrW/Ebw6h1485GOAvuG/OwB+ScsfPJBoNJeNFU6J0CAwEAAQ==
+    -----END PUBLIC KEY-----
+    """;
 
-  final _appPrivateKey = """-----BEGIN RSA PRIVATE KEY-----
-MIICWgIBAAKBgF22s6t6BLihEkRroHduR9J0PO1slI4XNrpWhnNM9AestacLah2S
-UAMavR6bChz4iqZZpehylXqgvPiRrdx6ggZ5eV4RJJ9ZlOSbw5Jasot8aAqEEmRM
-wBsvMcwTPGShytGJ8Ftyg2CaKY8d1cBAQLIjEFYbo9cySCRzuklhxpCVAgMBAAEC
-gYA+Ledws3lGd7kDJNZH6ChHf1CdyBmZXdW2NYroHfsczH+K4ov6KwZjyO4KzJwd
-NNvqHDl0zfJYdyZrV12gmLiEfahQlF4trzjT4LuEhDTysZI2dMYupMAdurOv5ZGS
-AYyxvWDYEgzMxcehmOAoWWZACkFHdDcdnUBmjQj06P290QJBAJ3sYH6YnC7xLOGw
-mgoiEmQgHjQaUXxMnOvbT7hco+ZNQCc8CHtt6YSDHdOAV49cAPuXslU2F5j0tTw7
-f1IkamsCQQCX6eCyjqNEaSgp40av4bMav40iO7uedtKTNRQAoER+XX+eFFkSIusk
-UZl8Pzf7kzpY2HM7Z4tXfrHmFvNmxbD/AkAygwKyO1npYda7MWNzzkYXpHZEsA5U
-NaUTg4hSLb920EquwfLsl9FTQyTtG2XmQsVFs9Wkj7Koh8zYQSeOPHuVAkAEEWxF
-+9HddB9yN7bd4OJl9fk2kHjuvmnXLVWyypfq9mADgLH97Vd0qoa8sAi0wPWQCYPU
-dGpj1m23Jqgv+V1LAkBib6xmeOrgjg0FqN6y05YAB/ug48956seOz3gRYtKEjFYu
-PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
------END RSA PRIVATE KEY-----""";
-  final _appId =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6MiwiaWF0IjoxNjAyMTQ2MDkwfQ._c1tjxnxcGURZNcNd2sUp_faiuP28cGeSKclzQ_Jyes";
+  final _appPrivateKey = """
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIBOwIBAAJBAOkNeYrZOhKTS6OcPEmbdRGDRgMHIpSpepulZJGwfg1IuRM+ZFBm
+    F6NgzicQDNXLtaO5DNjVw1o29BFoK0I6+sMCAwEAAQJAVCsGq2vaulyyI6vIZjkb
+    5bBId8164r/2xQHNuYRJchgSJahHGk46ukgBdUKX9IEM6dAQcEUgQH+45ARSSDor
+    mQIhAPt81zvT4oK1txaWEg7LRymY2YzB6PihjLPsQUo1DLf3AiEA7Tv005jvNbNC
+    pRyXcfFIy70IHzVgUiwPORXQDqJhWJUCIQDeDiZR6k4n0eGe7NV3AKCOJyt4cMOP
+    vb1qJOKlbmATkwIhALKSJfi8rpraY3kLa4fuGmCZ2qo7MFTKK29J1wGdAu99AiAQ
+    dx6DtFyY8hoo0nuEC/BXQYPUjqpqgNOx33R4ANzm9w==
+    -----END RSA PRIVATE KEY-----
+    """;
+  final _appToken =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6Njg2OH0.JyIdhQEX_Lx9CXRH4iHM8DqamLrMQJk5rhbslNW4GzY";
   final payMe = PaymeFlutter();
 
-  final _userIdTextController = TextEditingController();
-  final _phoneTextController = TextEditingController();
+  final _userIdTextController = TextEditingController(text: "123");
+  final _phoneTextController = TextEditingController(text:"0334345979");
 
   @override
   void initState() {
@@ -76,13 +77,6 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
               content: new Text(token),
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Copy'),
-                  onPressed: () async{
-                    await Clipboard.setData(new ClipboardData(text: token));
-                    Navigator.of(context).pop();
-                  },
-                ),
-                FlatButton(
                   child: Text('Close'),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -93,15 +87,19 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
     return token;
   }
 
-  Future<bool> _initPayMe(String appId, String publicKey, String appPrivateKey,
+  Future<bool> _initPayMe(String appToken, String publicKey, String appPrivateKey,
       String connectToken) async {
     return await payMe.init(
-        appId: _appId,
-        publicKey: _publickey,
-        appPrivateKey: _appPrivateKey,
+        appToken: appToken,
+        publicKey: publicKey,
+        appPrivateKey: appPrivateKey,
         env: Environment.SANDBOX,
         connectToken: connectToken,
         colors: [Color(0xFF75255B), Color(0xFF9d455f)]);
+  }
+
+  Future<bool> _login() async {
+    return await payMe.login();
   }
 
   Future<void> _openWallet() async {
@@ -169,9 +167,12 @@ PxEwdo4oskUeS4T8zhRJx1QL0Wq4EMTjLw1GlHif
                       final token = await _generateToken(
                           _userIdTextController.text,
                           _phoneTextController.text);
-                          print('connect token $token');
-                      await _initPayMe(
-                          _appId, _publickey, _appPrivateKey, token);
+                      print('connect token $token');
+                      final initResult = await _initPayMe(
+                          _appToken, _publickey, _appPrivateKey, token);
+                      print("initResult = $initResult");
+                      final isLogined = await _login();
+                      print("isLogined = $isLogined");
                     } else {
                       showDialog(
                           context: context,
