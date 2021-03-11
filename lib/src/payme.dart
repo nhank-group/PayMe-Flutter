@@ -64,9 +64,9 @@ class PaymeFlutter {
     return isInited;
   }
 
-  static Future<String> generateToken(String userId, String phone) async {
+  static Future<String> generateToken(String userId, String phone, String secretKey) async {
     return await _channel.invokeMethod('generate_token',
-        {"user_id": userId, "phone": phone, "key": "zfQpwE6iHbOeAfgX"});
+        {"user_id": userId, "phone": phone, "key": secretKey});
   }
 
   Future<bool> get isConnected async {
@@ -102,7 +102,7 @@ class PaymeFlutter {
     assert(amount != null, amount > 0);
     if (_isInited) {
       try {
-        return await _channel.invokeMethod('deposit');
+        return await _channel.invokeMethod('deposit', {"amount": amount});
       } catch (e) {
         Debug.log(e);
       }
@@ -116,7 +116,7 @@ class PaymeFlutter {
     assert(amount != null, amount > 0);
     if (_isInited) {
       try {
-        return await _channel.invokeMethod('withdraw');
+        return await _channel.invokeMethod('withdraw',{"amount": amount});
       } catch (e) {
         Debug.log(e);
       }

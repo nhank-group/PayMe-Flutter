@@ -17,6 +17,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import org.json.JSONObject
 import vn.payme.sdk.PayME
 import vn.payme.sdk.enums.Action
+import vn.payme.sdk.enums.ERROR_CODE
 import vn.payme.sdk.enums.Env
 
 import java.text.DateFormat
@@ -62,7 +63,7 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         _env = Env.SANDBOX
                     }
 
-                    this.payme = PayME(context, appId!!, publicKey!!, connectToken!!, appPrivateKey!!, colors?.toTypedArray()!!, _env)
+                    this.payme = PayME(context, appId!!, publicKey!!, connectToken!!, appPrivateKey!!, colors?.toTypedArray()!!, _env, true)
                     result.success(true)
                 }
 
@@ -99,9 +100,21 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "open_wallet" -> {
-                payme?.let {
-                    payme!!.openWallet()
-                }
+                payme?.openWallet(
+                        Action.OPEN, null, null, null,
+                        onSuccess = { json: JSONObject? ->
+                            result.success(true)
+                        },
+                        onError = { jsonObject, code, message ->
+                            PayME.showError(message)
+                            if (code == ERROR_CODE.EXPIRED) {
+
+                                payme?.logout()
+                            }
+
+                            result.error(code?.toString(), message, jsonObject)
+
+                        })
             }
 
             else -> {

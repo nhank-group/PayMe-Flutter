@@ -22,7 +22,7 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
         switch call.method {
         case "init":
             if let appToken = arguments?["app_token"] as? String, let publicKey = arguments?["public_key"] as? String, let connectToken = arguments?["connect_token"] as? String, let privateKey = arguments?["app_private_key"] as? String, let env = arguments?["env"] as? String, let colors = arguments?["colors"] as? [String] {
-                
+                print("abc")
                 var environment: PayME.Env = PayME.Env.SANDBOX
                 switch env {
                 case "production":
@@ -39,6 +39,7 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 result(true)
                 
             } else {
+                print("xyz")
                 result(false)
             }
             
@@ -53,7 +54,7 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 let dataEncrypted = try? aes!.encrypt(Array(String(data: params!, encoding: .utf8)!.utf8))
                  result(dataEncrypted!.toBase64()!)
             } else {
-                result(FlutterMethodNotImplemented)
+                result(nil)
             }
             break
         case "login":
@@ -61,7 +62,7 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
                 print(success)
                 result(true)
             }, onError: { (error) in
-                print(error)
+                print("login error:" + error.description)
                 result(false)
             })
             break
@@ -87,15 +88,9 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
             break
         case "deposit":
             if let currentVC = UIApplication.shared.keyWindow?.rootViewController as? FlutterViewController, let payMe = payMe, let amount = arguments?["amount"] as? Int {
-                let payMeVC = PayMeViewController()
-                payMeVC.modalPresentationStyle = .fullScreen
                 
-                let navigationController = UINavigationController(rootViewController: payMeVC)
-                navigationController.modalPresentationStyle = .fullScreen
-                UIApplication.shared.keyWindow?.rootViewController = navigationController
-                UIApplication.shared.keyWindow?.makeKeyAndVisible()
                 
-                payMe.deposit(currentVC: payMeVC, amount: amount, description: nil, extraData: nil, onSuccess: { (dict) in
+                payMe.deposit(currentVC: currentVC, amount: amount, description: nil, extraData: nil, onSuccess: { (dict) in
                     print(dict)
                 }, onError: { (error) in
                     print(error)

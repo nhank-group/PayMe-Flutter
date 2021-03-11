@@ -37,31 +37,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _publickey =
-      """
-    -----BEGIN PUBLIC KEY-----
-    MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKWcehEELB4GdQ4cTLLQroLqnD3AhdKi
-    wIhTJpAi1XnbfOSrW/Ebw6h1485GOAvuG/OwB+ScsfPJBoNJeNFU6J0CAwEAAQ==
-    -----END PUBLIC KEY-----
+  final _publickey = """
+-----BEGIN PUBLIC KEY----- MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAK+RnW1asb6a/9+HTClLkUEJF8mvywdJ H6+/xk5Nt7m1E2TVjhE+zfp6dmuqRySHAtrsgP95tkJH8OZk+9u7C7ECAwEAAQ== -----END PUBLIC KEY----- 
     """;
 
   final _appPrivateKey = """
-    -----BEGIN RSA PRIVATE KEY-----
-    MIIBOwIBAAJBAOkNeYrZOhKTS6OcPEmbdRGDRgMHIpSpepulZJGwfg1IuRM+ZFBm
-    F6NgzicQDNXLtaO5DNjVw1o29BFoK0I6+sMCAwEAAQJAVCsGq2vaulyyI6vIZjkb
-    5bBId8164r/2xQHNuYRJchgSJahHGk46ukgBdUKX9IEM6dAQcEUgQH+45ARSSDor
-    mQIhAPt81zvT4oK1txaWEg7LRymY2YzB6PihjLPsQUo1DLf3AiEA7Tv005jvNbNC
-    pRyXcfFIy70IHzVgUiwPORXQDqJhWJUCIQDeDiZR6k4n0eGe7NV3AKCOJyt4cMOP
-    vb1qJOKlbmATkwIhALKSJfi8rpraY3kLa4fuGmCZ2qo7MFTKK29J1wGdAu99AiAQ
-    dx6DtFyY8hoo0nuEC/BXQYPUjqpqgNOx33R4ANzm9w==
-    -----END RSA PRIVATE KEY-----
+-----BEGIN RSA PRIVATE KEY-----
+MIIBOgIBAAJBAIXtP/j33hBYsnMq4hCFKtJlnc5+4bIBtHJVbR46S7b5w34C1yqT
+jTmaBdrqVJB9budx4Sto9x8KqNxnVoHGkl0CAwEAAQJARawNMcpRHhPmkf9nJ8z/
+YAE5PWnIpEA6zZgfcjBFn2Q5asdZv8czC/gh4e3jqa5jMGfwGqlUand+jnX7jsdN
+gQIhAP8ee8ppfiodOvSeJOhmL2rww3TQv17qQ931Sfvs95FxAiEAhmOi8rDT4/ct
+/ey3NEYpVjFBYPdusEfKA30Dazb5Wa0CIHbDjSNMeuRGGUT5PftGXrqs/ICsEPqx
+mgiBAQEbbqCxAiB5sSWv4AGvr3edNUpccqAh5a5PMR+xTwCWEhETeA9pbQIhAKV7
+WVdttMMDvepZdSb/YydlYxenU2TtW8kJYmt/GY9x
+-----END RSA PRIVATE KEY-----
     """;
   final _appToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6Njg2OH0.JyIdhQEX_Lx9CXRH4iHM8DqamLrMQJk5rhbslNW4GzY";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6MTMsImlhdCI6MTYxNDE0MjQzOH0.h2pve1FoI4am4Or7nJAUUpK7QS_5Cc-8mFTfwBqogZE";
   final payMe = PaymeFlutter();
 
-  final _userIdTextController = TextEditingController(text: "123");
-  final _phoneTextController = TextEditingController(text:"0334345979");
+  final _userIdTextController = TextEditingController(text: "0334345979");
+  final _phoneTextController = TextEditingController(text: "0334345979");
+  final _moneyController = TextEditingController(text: "10000");
 
   @override
   void initState() {
@@ -69,7 +66,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<String> _generateToken(String userId, String phone) async {
-    final token = await PaymeFlutter.generateToken(userId, phone);
+    final token = await PaymeFlutter.generateToken(
+        userId, phone, "a88764bf353f48e3024988da59f57f30");
     await showDialog(
         context: context,
         builder: (_) => new AlertDialog(
@@ -87,15 +85,19 @@ class _HomePageState extends State<HomePage> {
     return token;
   }
 
-  Future<bool> _initPayMe(String appToken, String publicKey, String appPrivateKey,
-      String connectToken) async {
+  Future<bool> _initPayMe(String appToken, String publicKey,
+      String appPrivateKey, String connectToken) async {
     return await payMe.init(
         appToken: appToken,
         publicKey: publicKey,
         appPrivateKey: appPrivateKey,
         env: Environment.SANDBOX,
         connectToken: connectToken,
-        colors: [Color(0xFF75255B), Color(0xFF9d455f)]);
+        colors: [Color(0xFFE6C371)]);
+  }
+
+  Future _deposit(int amount) async {
+    return await payMe.deposit(amount);
   }
 
   Future<bool> _login() async {
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                               ));
                     }
                   },
-                  child: Text("Tạo token"))
+                  child: Text("Login"))
             ],
           ),
           FlatButton(
@@ -242,7 +244,52 @@ class _HomePageState extends State<HomePage> {
                   });
                 } else {}
               },
-              child: Text("Thông tin tài khoảng"))
+              child: Text("Thông tin tài khoản")),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: new InputDecoration(
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                      ),
+                      fillColor: Colors.grey,
+                      contentPadding: EdgeInsets.only(
+                          left: 15, bottom: 11, top: 11, right: 15),
+                      hintText: "Nhập số tiền"),
+                  controller: _moneyController,
+                ),
+              ),
+              FlatButton(
+                  color: Colors.blue,
+                  onPressed: () async {
+                    if (_moneyController.text != null) {
+                      _deposit(int.parse(_moneyController.text));
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (_) => new AlertDialog(
+                                title: new Text("Lỗi"),
+                                content:
+                                    new Text("Vui lòng nhập user id và phone"),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
+                                ],
+                              ));
+                    }
+                  },
+                  child: Text("Nạp tiền"))
+            ],
+          )
         ],
       ),
     );
