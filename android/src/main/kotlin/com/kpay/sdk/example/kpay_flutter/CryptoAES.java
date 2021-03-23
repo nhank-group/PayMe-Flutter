@@ -1,4 +1,4 @@
-package com.payme.sdk.example.payme_flutter;
+package com.kpay.sdk.example.kpay_flutter;
 
 import android.util.Base64;
 

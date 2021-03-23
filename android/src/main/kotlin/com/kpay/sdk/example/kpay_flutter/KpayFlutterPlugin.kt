@@ -1,4 +1,4 @@
-package com.payme.sdk.example.payme_flutter
+package com.kpay.sdk.example.kpay_flutter
 
 import android.app.Activity
 import android.content.Context
@@ -16,9 +16,10 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import org.json.JSONObject
 import vn.payme.sdk.PayME
-import vn.payme.sdk.enums.Action
 import vn.payme.sdk.enums.ERROR_CODE
 import vn.payme.sdk.enums.Env
+import vn.payme.sdk.enums.LANGUAGES
+
 
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -26,20 +27,20 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-/** PaymeFlutterPlugin */
-class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+/** KpayFlutterPlugin */
+class KpayFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private lateinit var channel: MethodChannel
-    private var payme: PayME? = null
+    private var kpay: PayME? = null
 
     private lateinit var context: Context
     private lateinit var activity: Activity
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "payme_flutter")
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "kpay_flutter")
         channel.setMethodCallHandler(this)
         context = flutterPluginBinding.applicationContext
     }
@@ -63,7 +64,7 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         _env = Env.SANDBOX
                     }
 
-                    this.payme = PayME(context, appId!!, publicKey!!, connectToken!!, appPrivateKey!!, colors?.toTypedArray()!!, _env, true)
+                    this.kpay = PayME(context, appId!!, publicKey!!, connectToken!!, appPrivateKey!!, colors?.toTypedArray()!!, LANGUAGES.VN, _env, true)
                     result.success(true)
                 }
 
@@ -90,7 +91,7 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "login" -> {
-                payme?.login(onSuccess = { jsonObject ->
+                kpay?.login(onSuccess = { jsonObject ->
                     result.success(true)
                 },
                         onError = { jsonObject, code, message ->
@@ -100,20 +101,15 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             "open_wallet" -> {
-                payme?.openWallet(
-                        Action.OPEN, null, null, null,
-                        onSuccess = { json: JSONObject? ->
-                            result.success(true)
-                        },
+                kpay?.openWallet(onSuccess = { json: JSONObject? ->
+                    result.success(true)
+                },
                         onError = { jsonObject, code, message ->
                             PayME.showError(message)
                             if (code == ERROR_CODE.EXPIRED) {
-
-                                payme?.logout()
+                                kpay?.logout()
                             }
-
                             result.error(code?.toString(), message, jsonObject)
-
                         })
             }
 
@@ -128,7 +124,7 @@ class PaymeFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity;
+        activity = binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {

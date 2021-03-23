@@ -1,9 +1,9 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:payme_flutter/payme_flutter.dart';
+import 'package:kpay_flutter/kpay_flutter.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('payme_flutter');
+  const MethodChannel channel = MethodChannel('kpay_flutter');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 

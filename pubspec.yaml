@@ -1,5 +1,5 @@
-name: payme_flutter
-description: This is plugin support for PayMe
+name: kpay_flutter
+description: This is plugin support for K-Pay
 version: 0.0.1
 author:
 homepage:
@@ -28,10 +28,10 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.payme.sdk.example.payme_flutter
-        pluginClass: PaymeFlutterPlugin
+        package: com.kpay.sdk.example.kpay_flutter
+        pluginClass: KpayFlutterPlugin
       ios:
-        pluginClass: PaymeFlutterPlugin
+        pluginClass: KpayFlutterPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

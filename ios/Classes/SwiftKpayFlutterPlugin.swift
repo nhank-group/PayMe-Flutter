@@ -4,7 +4,7 @@ import PayMESDK
 import CryptoSwift
 
 @available(iOS 11.0, *)
-public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
+public class SwiftKpayFlutterPlugin: NSObject, FlutterPlugin {
     
     var payMe: PayME?
     var flutterVC: UIViewController?
@@ -12,8 +12,8 @@ public class SwiftPaymeFlutterPlugin: NSObject, FlutterPlugin {
     
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "payme_flutter", binaryMessenger: registrar.messenger())
-        let instance = SwiftPaymeFlutterPlugin()
+        let channel = FlutterMethodChannel(name: "kpay_flutter", binaryMessenger: registrar.messenger())
+        let instance = SwiftKpayFlutterPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     

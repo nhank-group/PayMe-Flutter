@@ -1,4 +1,4 @@
-group 'com.payme.sdk.example.payme_flutter'
+group 'com.kpay.sdk.example.kpay_flutter'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -19,7 +19,7 @@ rootProject.allprojects {
         google()
         jcenter()
         maven {
-            url  "https://dl.bintray.com/payme/maven"
+            url  "https://dl.bintray.com/kpay/maven"
         }
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    implementation 'vn.payme.sdk:payme-sdk:0.2.7'
+    implementation 'vn.payme.sdk:payme-sdk:0.3.5'
     // thư viện kèm theo
 
     implementation 'com.android.volley:volley:1.1.1'

@@ -1,6 +1,6 @@
-# payme_flutter_example
+# kpay_flutter_example
 
-Demonstrates how to use the payme_flutter plugin.
+Demonstrates how to use the kpay_flutter plugin.
 
 ## Getting Started
 

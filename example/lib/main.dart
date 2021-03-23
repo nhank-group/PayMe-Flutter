@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:payme_flutter/payme_flutter.dart';
+import 'package:kpay_flutter/kpay_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -54,7 +54,7 @@ WVdttMMDvepZdSb/YydlYxenU2TtW8kJYmt/GY9x
     """;
   final _appToken =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBJZCI6MTMsImlhdCI6MTYxNDE0MjQzOH0.h2pve1FoI4am4Or7nJAUUpK7QS_5Cc-8mFTfwBqogZE";
-  final payMe = PaymeFlutter();
+  final payMe = KpayFlutter();
 
   final _userIdTextController = TextEditingController(text: "0334345979");
   final _phoneTextController = TextEditingController(text: "0334345979");
@@ -66,7 +66,7 @@ WVdttMMDvepZdSb/YydlYxenU2TtW8kJYmt/GY9x
   }
 
   Future<String> _generateToken(String userId, String phone) async {
-    final token = await PaymeFlutter.generateToken(
+    final token = await KpayFlutter.generateToken(
         userId, phone, "a88764bf353f48e3024988da59f57f30");
     await showDialog(
         context: context,

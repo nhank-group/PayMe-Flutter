@@ -7,7 +7,7 @@ import 'debug.dart';
 import 'extension.dart';
 import 'model.dart';
 
-class PaymeFlutter {
+class KpayFlutter {
   String _appToken;
   String _publicKey;
   String _appPrivateKey;
@@ -15,10 +15,10 @@ class PaymeFlutter {
   Environment _env;
   List<Color> _colors = [Colors.black];
 
-  static const MethodChannel _channel = const MethodChannel('payme_flutter');
+  static const MethodChannel _channel = const MethodChannel('kpay_flutter');
   bool _isInited = false;
 
-  PaymeFlutter() {
+  KpayFlutter() {
     Debug.enabled = true;
   }
 

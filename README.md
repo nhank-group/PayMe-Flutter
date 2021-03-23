@@ -1,4 +1,4 @@
-# payme_flutter
+# kpay_flutter
 
 A new flutter plugin project.
 
